@@ -1,0 +1,50 @@
+### Variables for generating exporter configs when exporter is enabled - copied remotely to prometheus_file_sd_config_path
+## The targets are the names of environments, e.g. ../inventory/embmadeup
+
+# Node-exporter
+
+prometheus_node_exporter_enabled: False
+prometheus_node_exporter_configfile: prometheus-node_exporter-hosts.yml
+prometheus_node_exporter_targets:
+  - embixd
+  - eminxd
+
+prometheus_node_exporter_port: 9100
+prometheus_node_exporter_jobname: node
+prometheus_node_exporter_job_group: application_servers
+
+# Wildfly JMX-exporter
+
+prometheus_wildflyjmx_exporter_enabled: False
+prometheus_wildflyjmx_exporter_configfile: prometheus-wildflyjmx_exporter-hosts.yml
+prometheus_wildflyjmx_exporter_targets:
+  - embixd
+  - eminxd
+
+jmx_exporter_wildfly_port: 9243
+prometheus_wildflyjmx_exporter_jobname: wildflyjmx
+prometheus_wildflyjmx_exporter_job_group: application_servers
+
+# Artemis JMX-exporter
+
+prometheus_artemisjmx_exporter_enabled: False
+prometheus_artemisjmx_exporter_configfile: prometheus-artemisjmx_exporter-hosts.yml
+prometheus_artemisjmx_exporter_targets:
+  - embixd
+  - eminxd
+
+jmx_exporter_artemis_port: 9242
+prometheus_artemisjmx_exporter_jobname: artemisjmx
+prometheus_artemisjmx_exporter_job_group: application_servers
+
+# Postgres-exporter
+
+prometheus_postgres_exporter_enabled: False
+prometheus_postgres_exporter_configfile: prometheus-artemisjmx_exporter-hosts.yml
+prometheus_postgres_exporter_targets:
+  - embixd
+  - eminxd
+
+postgres_exporter_port: 9187
+prometheus_postgres_exporter_jobname: postgres
+prometheus_postgres_exporter_job_group: database_servers

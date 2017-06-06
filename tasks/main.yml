@@ -1,0 +1,91 @@
+- block:
+    - name: generate prometheus node exporter hosts config file
+      command: /bin/bash -c "{{ role_path }}/library/inventoryparse.sh {{ prometheus_node_exporter_targets | list | join(" ") }}"
+      delegate_to: 127.0.0.1
+      environment:
+        JOB_NAME: "{{ prometheus_node_exporter_jobname }}"
+        CONFIG_PATH: "{{ role_path }}/files/{{ prometheus_node_exporter_configfile }}"
+        INVENTORY_PATH: "{{ playbook_dir }}/inventory"
+        GROUP: "{{ prometheus_node_exporter_job_group }}"
+        EXPORTER_PORT: "{{ prometheus_node_exporter_port }}"
+
+    - name: copy prometheus node exporter hosts config file
+      copy:
+        src: "files/prometheus-hosts-config.yml"
+        dest: "{{ prometheus_file_sd_config_path }}/{{ prometheus_node_exporter_configfile }}"
+        owner: "{{ prometheus_user }}"
+        group: "{{ prometheus_group }}"
+        mode: "u=rwx,g=rwx,o=r"
+        validate: "{{ prometheus_daemon_dir }}/promtool check-config %s"
+      notify:
+        - reload prometheus
+  when: prometheus_node_exporter_enabled
+
+- block:
+    - name: generate prometheus wildflyjmx exporter hosts config file
+      command: /bin/bash -c "{{ role_path }}/library/inventoryparse.sh {{ prometheus_wildflyjmx_exporter_targets | list | join(" ") }}"
+      delegate_to: 127.0.0.1
+      environment:
+        JOB_NAME: "{{ prometheus_wildflyjmx_exporter_jobname }}"
+        CONFIG_PATH: "{{ role_path }}/files/{{ prometheus_wildflyjmx_exporter_configfile }}"
+        INVENTORY_PATH: "{{ playbook_dir }}/inventory"
+        GROUP: "{{ prometheus_wildflyjmx_exporter_job_group }}"
+        EXPORTER_PORT: "{{ jmx_exporter_wildfly_port }}"
+
+    - name: copy prometheus wildflyjmx exporter hosts config file
+      copy:
+        src: "files/{{ prometheus_wildflyjmx_exporter_configfile }}"
+        dest: "{{ prometheus_file_sd_config_path }}/{{ prometheus_wildflyjmx_exporter_configfile }}"
+        owner: "{{ prometheus_user }}"
+        group: "{{ prometheus_group }}"
+        mode: "u=rwx,g=rwx,o=r"
+        validate: "{{ prometheus_daemon_dir }}/promtool check-config %s"
+      notify:
+        - reload prometheus
+  when: prometheus_wildflyjmx_exporter_enabled
+
+- block:
+    - name: generate prometheus artemis jmx exporter hosts config file
+      command: /bin/bash -c "{{ role_path }}/library/inventoryparse.sh {{ prometheus_artemisjmx_exporter_targets | list | join(" ") }}"
+      delegate_to: 127.0.0.1
+      environment:
+        JOB_NAME: "{{ prometheus_artemisjmx_exporter_jobname }}"
+        CONFIG_PATH: "{{ role_path }}/files/{{ prometheus_artemisjmx_exporter_configfile }}"
+        INVENTORY_PATH: "{{ playbook_dir }}/inventory"
+        GROUP: "{{ prometheus_artemisjmx_exporter_job_group }}"
+        EXPORTER_PORT: "{{ jmx_exporter_artemis_port }}"
+
+    - name: copy prometheus artemis jmx exporter hosts config file
+      copy:
+        src: "files/{{ prometheus_artemisjmx_exporter_configfile }}"
+        dest: "{{ prometheus_file_sd_config_path }}/{{ prometheus_artemisjmx_exporter_configfile }}"
+        owner: "{{ prometheus_user }}"
+        group: "{{ prometheus_group }}"
+        mode: "u=rwx,g=rwx,o=r"
+        validate: "{{ prometheus_daemon_dir }}/promtool check-config %s"
+      notify:
+        - reload prometheus
+  when: prometheus_artemisjmx_exporter_enabled
+
+- block:
+    - name: generate prometheus postgres exporter hosts config file
+      command: /bin/bash -c "{{ role_path }}/library/inventoryparse.sh {{ prometheus_postgres_exporter_targets | list | join(" ") }}"
+      delegate_to: 127.0.0.1
+      environment:
+        JOB_NAME: "{{ prometheus_postgres_exporter_jobname }}"
+        CONFIG_PATH: "{{ role_path }}/files/{{ prometheus_postgres_exporter_configfile }}"
+        INVENTORY_PATH: "{{ playbook_dir }}/inventory"
+        GROUP: "{{ prometheus_postgres_exporter_job_group }}"
+        EXPORTER_PORT: "{{ postgres_exporter_port }}"
+
+    - name: copy prometheus postgres exporter hosts config file
+      copy:
+        src: "files/{{ prometheus_postgres_exporter_configfile }}"
+        dest: "{{ prometheus_file_sd_config_path }}/{{ prometheus_postgres_exporter_configfile }}"
+        owner: "{{ prometheus_user }}"
+        group: "{{ prometheus_group }}"
+        mode: "u=rwx,g=rwx,o=r"
+        validate: "{{ prometheus_daemon_dir }}/promtool check-config %s"
+      notify:
+        - reload prometheus
+  when: prometheus_postgres_exporter_enabled
